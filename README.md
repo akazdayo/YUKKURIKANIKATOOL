@@ -4,9 +4,9 @@
 # 必要なもの
 棒読みちゃんが必須です。
 # ライブラリー
-Python 3.9.5
-Tkinter 8.6.9
-Requests 2.25.1
-棒読みちゃん 0.1.11.0 Beta21
+Python 3.9.5  
+Tkinter 8.6.9  
+Requests 2.25.1  
+棒読みちゃん 0.1.11.0 Beta21  
 
 
