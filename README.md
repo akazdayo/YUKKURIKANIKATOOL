@@ -5,7 +5,7 @@
 棒読みちゃんが必須です。
 # 参考にしたサイト
 https://qiita.com/lt900ed/items/a5b44e4c27def192d323
-# ライブラリー
+# ライブラリー等
 Python 3.9.5  
 Tkinter 8.6.9  
 Requests 2.25.1  
