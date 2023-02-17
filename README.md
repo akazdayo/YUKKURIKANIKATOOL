@@ -27,6 +27,8 @@ CLEARボタンは入力履歴を初期化します。
 
 
 ## インストール方法
+### 事前にインストールしておくもの
+python 3.10.9  
 ```bash
 git clone https://github.com/akazdayo/YUKKURIKANIKATOOL.git
 pip install pipenv
