@@ -1,27 +1,13 @@
-import requests
 import tkinter
 import datetime
 from tkinter import messagebox
-import subprocess
-
-
-class speak():
+from speaker import bouyomi
+class GUIController():
     def __init__(self) -> None:
         self.mode = True
         self.d = ''
         self.counting = 2.0
         self.read = ''
-
-    def speak_bouyomi(self, text='', volume=-1, speed=-1, tone=-1):
-        res = requests.get(
-            'http://localhost:50080/Talk',
-            params={
-                'text': text,
-                'voice': 1,
-                'volume': volume,
-                'speed': speed,
-                'tone': tone})
-        return res.status_code
 
     def on_press_enter(self, _):
         self.read = EditBox.get()
@@ -30,7 +16,7 @@ class speak():
         elif (self.read == "time"):
             dt_now = datetime.datetime.now()
             times = dt_now.strftime('%Y年%m月%d日 %H時%M分%S秒')
-            self.speak_bouyomi("速度(200)" + times, int(vol.get()))
+            Speaker("速度(200)" + times, int(vol.get()))
             self.read = times
         elif (self.mode == True):
             if (self.read == ''):
@@ -44,7 +30,7 @@ class speak():
                     self.counting, '---------------\n')
                 text_widget.configure(state='disabled')
                 self.counting += 1
-            self.speak_bouyomi(self.read, int(vol.get()))
+            Speaker(self.read, int(vol.get()))
             if (self.read != ''):
                 text_widget.configure(state='normal')
                 text_widget.insert(
@@ -66,7 +52,7 @@ class speak():
                     self.counting, '---------------\n')
                 text_widget.configure(state='disabled')
                 self.counting += 1
-                self.speak_bouyomi(self.d, int(vol.get()))
+                Speaker(self.d, int(vol.get()))
                 self.read = ''
                 self.d = ''
             elif (self.read == "reset"):
@@ -81,7 +67,7 @@ class speak():
             self.counting += 1
         EditBox.delete(0, tkinter.END)
 
-    def reset(self):
+    def reset(self, _):
         text_widget.configure(state='normal')
         text_widget.delete("1.0", "end")
         text_widget.configure(state='disabled')
@@ -109,9 +95,11 @@ class speak():
             "INFORMATION", "INFORMATION\nこのプログラムは「棒読みちゃん」をベースに作られています。\nゆっくり簡易化ツール\n作者 あかず\n")
 
 
-# セットアップ
-Speak = speak()
+#セットアップ
+GUIController = GUIController()
 
+#話者の設定
+Speaker = bouyomi.speak
 
 root = tkinter.Tk()
 root.geometry("400x500")
@@ -126,10 +114,10 @@ EditBox.insert(tkinter.END, "ここにしゃべらせたい言葉を入力!")
 EditBox.place(x=5, y=25)
 
 outCheckBox = tkinter.Checkbutton(
-    root, variable=bln, text='即出力', onvalue=True, offvalue=False, command=Speak.change)
+    root, variable=bln, text='即出力', onvalue=True, offvalue=False, command=GUIController.change)
 outCheckBox.place(x=250, y=60)
 
-Speak.mode = bln.get()
+GUIController.mode = bln.get()
 
 vol = tkinter.DoubleVar()
 vol.set(100)
@@ -150,31 +138,31 @@ text_widget.insert(
 text_widget.configure(state='disabled')
 
 Button = tkinter.Button(text=u'ENTER', width=10)
-Button.bind("<Button-1>", Speak.on_press_enter)
+Button.bind("<Button-1>", GUIController.on_press_enter)
 Button.place(x=5, y=60)
 
-# エンターキー
-root.bind('<Return>', Speak.on_press_enter)
+#エンターキー
+root.bind('<Return>', GUIController.on_press_enter)
 
 
 Button2 = tkinter.Button(text=u'HELP', width=10)
-Button2.bind("<Button-1>", Speak.HELP)
+Button2.bind("<Button-1>", GUIController.HELP)
 Button2.place(x=315, y=2)
 
 Button3 = tkinter.Button(text=u'INFO', width=10)
-Button3.bind("<Button-1>", Speak.info)
+Button3.bind("<Button-1>", GUIController.info)
 Button3.place(x=315, y=30)
 
 Button3 = tkinter.Button(text=u'CLEAR', width=10)
-Button3.bind("<Button-1>", Speak.reset)
+Button3.bind("<Button-1>", GUIController.reset)
 Button3.place(x=315, y=59)
 
 Button4 = tkinter.Button(text=u'UNDO', width=10)
-Button4.bind("<Button-1>", Speak.UNDO)
+Button4.bind("<Button-1>", GUIController.UNDO)
 Button4.place(x=90, y=60)
 
 
-Speak.speak_bouyomi(text="ゆっくり簡易化ツールが起動しました。ベータ7.5")
+Speaker(text="ゆっくり簡易化ツールが起動しました。ベータ7.5")
 root.title(u"ゆっくり簡易化ツール")
 
 root.columnconfigure(0, weight=1)
